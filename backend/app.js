@@ -11,9 +11,9 @@ app.use(cookieParser());
 app.use(bodyParser.urlencoded({ extended: true }));
 
 // Route Imports
-// const user = require("./routes/userRoute");
+const user = require("./routes/userRoute");
 
-// app.use("/api/v1", user);
+app.use("/api/v1", user);
 
 // Middleware for Errors
 app.use(errorMiddleware);

@@ -2,11 +2,11 @@ const app = require("./app")
 // const app = require("./app");
 const connectDatabase = require("./config/database");
 const dotenv = require("dotenv");
-// const mongoose = require('mongoose');
+const mongoose = require('mongoose');
 
 // Handling Uncaught Exception
 process.on("uncaughtException", (err) => {
-    console.log(`Error: ${err.message}`);
+    console.log(`Error: ${err.stack}`);
     console.log(`Shutting down the server due to Uncaught Exception`);
     process.exit(1);
   });
@@ -79,7 +79,7 @@ process.on("unhandledRejection", (err) => {
 // Mcq.create({
 //     question: "What is the square root of 16?",
 //     options: ["4", "1","8"],
-//     correctOptionIndex: 10
+//     correctOptionIndex: 1
 // })
 
 // const Assignment = require("./models/assignmentModel")
