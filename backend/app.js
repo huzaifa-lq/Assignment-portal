@@ -12,8 +12,10 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 // Route Imports
 const user = require("./routes/userRoute");
+const assignment = require("./routes/assignmentRoute");
 
 app.use("/api/v1", user);
+app.use("/api/v1", assignment);
 
 // Middleware for Errors
 app.use(errorMiddleware);

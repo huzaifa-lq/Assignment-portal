@@ -33,12 +33,14 @@ exports.registerUser = catchAsyncErrors(async (req, res, next) => {
     const user = await User.findOne({ email }).select("+password");
   
     if (!user) {
+      console.log("User not found");
       return next(new ErrorHander("Invalid email or password", 401));
     }
   
     const isPasswordMatched = await user.comparePassword(password);
   
     if (!isPasswordMatched) {
+      console.log("Incorrect password");
       return next(new ErrorHander("Invalid email or password", 401));
     }
 
