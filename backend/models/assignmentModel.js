@@ -1,4 +1,6 @@
 const mongoose = require('mongoose');
+const MCQ = require('../models/mcqModel');
+const TextQuestion = require('../models/textQuestionModel');
 
 
 const assignmentSchema = new mongoose.Schema({

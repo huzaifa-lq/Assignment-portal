@@ -141,7 +141,13 @@ exports.registerUser = catchAsyncErrors(async (req, res, next) => {
     exports.getAssignments = catchAsyncErrors(async (req, res, next) => {
       const {email} = req.body;
       // const assignments = await User.findOne({ email }).select('assignments').populate('assignments');
-      const assignments = await User.findOne({ email }).populate('assignments');
+      // const assignments = await User.findOne({ email }).populate('assignments').populate('assignments.');
+      const assignments = await User.findOne({ email }).populate({
+        path: 'assignments',
+        populate: {
+          path: 'questions.questionId',
+        }
+      }); 
       console.log(assignments);
       
       // const user = await User.findOne({ email });
