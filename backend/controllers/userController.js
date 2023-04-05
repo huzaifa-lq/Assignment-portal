@@ -5,7 +5,9 @@ const sendToken = require("../utils/jwtToken");
 // const sendEmail = require("../utils/sendEmail");
 const crypto = require("crypto");
 const ErrorHandler = require("../utils/errorhandler");
-const sendEmail = require("../utils/sendEmail")
+const sendEmail = require("../utils/sendEmail");
+const { assign } = require("nodemailer/lib/shared");
+const Assignment = require("../models/assignmentModel");
 
 exports.registerUser = catchAsyncErrors(async (req, res, next) => {
     const { name, email, password } = req.body;
@@ -164,4 +166,15 @@ exports.registerUser = catchAsyncErrors(async (req, res, next) => {
       //   }
       res.status(200).json(assignments);
   
+  })
+
+  exports.updateAssignment = catchAsyncErrors(async (req, res, next) => {
+    const {id, questions} = req.body;
+    const assignment = await Assignment.findById(id);
+    if(!assignment){
+      return next(new ErrorHandler("Assignment not found", 404))  
+    }
+    assignment.questions = questions;
+    await assignment.save();
+    res.status(200).json(assignment);
   })

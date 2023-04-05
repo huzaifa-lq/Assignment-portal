@@ -6,7 +6,8 @@ const {
   forgotPassword,
 resetPassword,
 addAssignment,
-getAssignments} = require("../controllers/userController");
+getAssignments,
+updateAssignment} = require("../controllers/userController");
 
   const router = express.Router();
 
@@ -18,4 +19,5 @@ router.route("/password/forgot").post(forgotPassword);
 router.route("/password/reset/:token").put(resetPassword);
 router.route("/assignment/add").post(addAssignment)
 router.route("/assignment").get(getAssignments);
+router.route("/assignment").put(updateAssignment);
 module.exports = router;
