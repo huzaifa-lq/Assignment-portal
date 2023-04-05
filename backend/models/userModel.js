@@ -29,11 +29,11 @@ const userSchema = new mongoose.Schema({
         enum: ['Admin', 'Teacher']
     },
     assignments: {
-        type: [{
-            type: mongoose.Schema.Types.ObjectId,
-            ref: 'Assignment'
-          }]
-    },
+      type: [{
+          type: mongoose.Schema.Types.ObjectId,
+          ref: 'Assignment'
+        }]
+  },
   resetPasswordToken: String,
   resetPasswordExpire: Date,
     });
