@@ -1,10 +1,11 @@
 const express = require("express");
 const {
-    createTextQuestion,
+    createTextQuestion, updateTextQuestion,
 } = require("../controllers/textQuesController");
 
 const router = express.Router();
 
-router.route("/textQuestion/new").post(createTextQuestion);
+router.route("/textQuestion").post(createTextQuestion);
+router.route("/textQuestion").put(updateTextQuestion);
 
 module.exports = router;

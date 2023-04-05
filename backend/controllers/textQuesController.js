@@ -13,3 +13,21 @@ exports.createTextQuestion = catchAsyncErrors(async (req, res, next) => {
         message: "Text Question created successfully"
     })
 });
+
+
+exports.updateTextQuestion = catchAsyncErrors(async (req, res, next) => {
+    const {id, question} = req.body;
+    const textQuestion = await TextQuestion.findById(id);
+    if(!textQuestion){
+      return next(new ErrorHandler("Question not found", 404))  
+    }
+    textQuestion.question = question;
+    await textQuestion.save();
+    res.status(200).json(textQuestion);
+
+    res.status(200).json({
+        success: true,
+        message: "Text Question updated successfully",
+        textQuestion
+    })
+});
