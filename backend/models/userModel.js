@@ -27,6 +27,12 @@ const userSchema = new mongoose.Schema({
         type: String,
         enum: ['Admin', 'Teacher']
     },
+    assignments: {
+      type: [{
+          type: mongoose.Schema.Types.ObjectId,
+          ref: 'Assignment'
+        }]
+  },
   resetPasswordToken: String,
   resetPasswordExpire: Date,
     });

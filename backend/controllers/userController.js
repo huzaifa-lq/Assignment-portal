@@ -119,3 +119,19 @@ exports.registerUser = catchAsyncErrors(async (req, res, next) => {
       await user.save();
       sendToken(user, 200, res);
     });
+
+    exports.addAssignment = catchAsyncErrors(async (req, res, next) => {
+      const {email, assignments} = req.body;
+ 
+      const user = await User.findOne({email});
+  
+  if(!user){
+    return next(new ErrorHandler("User not found", 404))
+  }
+  user.assignments= assignments;
+  await user.save();
+  res.status(200).json({
+    success: true,
+    user
+  })
+    })
