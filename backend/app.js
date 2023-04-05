@@ -14,10 +14,12 @@ app.use(bodyParser.urlencoded({ extended: true }));
 const user = require("./routes/userRoute");
 const textQuestion = require("./routes/textQuesRoute");
 const assignment = require("./routes/assignmentRoute");
+const mcq = require("./routes/mcqRoute");
 
 app.use("/api/v1", user);
 app.use("/api/v1", assignment);
 app.use("/api/v1", textQuestion);
+app.use("/api/v1", mcq);
 
 
 // Middleware for Errors
