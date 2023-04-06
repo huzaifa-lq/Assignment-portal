@@ -1,4 +1,6 @@
 const mongoose = require('mongoose');
+const MCQ = require('../models/mcqModel');
+const TextQuestion = require('../models/textQuestionModel');
 
 
 const assignmentSchema = new mongoose.Schema({
@@ -6,7 +8,7 @@ const assignmentSchema = new mongoose.Schema({
         type: [{
         questionId: {	
             type: mongoose.Schema.Types.ObjectId,
-            required: [true, 'There must be at least 5 questions in an assignment'],
+            required: [true, 'questionId is required'],
             refPath: "questions.onModel"
         }
         ,
@@ -16,8 +18,8 @@ const assignmentSchema = new mongoose.Schema({
             enum: ['MCQ', 'TextQuestion']
         }
     }],
-        validate: [(val) => val.length > 4, 'There must be at least 5 questions in an assignment'],
-        required: true,
+        //validate: [(val) => {console.log(val); return val.length > 4;}, 'There must be at least 5 questions in an assignment'],
+        required: [true,'questons are required to create an assignment'],
     }
     });
 

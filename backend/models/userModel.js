@@ -3,6 +3,7 @@ const validator = require("validator");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const crypto = require("crypto");
+const assignment = require("../models/assignmentModel");
 
 const userSchema = new mongoose.Schema({
     name: { 
@@ -27,6 +28,12 @@ const userSchema = new mongoose.Schema({
         type: String,
         enum: ['Admin', 'Teacher']
     },
+    assignments: {
+      type: [{
+          type: mongoose.Schema.Types.ObjectId,
+          ref: 'Assignment'
+        }]
+  },
   resetPasswordToken: String,
   resetPasswordExpire: Date,
     });
@@ -70,5 +77,11 @@ userSchema.methods.getResetPasswordToken = function () {
     return resetToken;
   };
 
+  userSchema.methods.addAssignment = function(assignments){
+    console.log("HERE");
+    console.log("assignments:"+this.assignments);
+    this.assignments.push(assignments);
+    console.log("assignments:"+this.assignments);
+  }
 
     module.exports = mongoose.model("User", userSchema);

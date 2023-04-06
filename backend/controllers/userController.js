@@ -5,7 +5,9 @@ const sendToken = require("../utils/jwtToken");
 // const sendEmail = require("../utils/sendEmail");
 const crypto = require("crypto");
 const ErrorHandler = require("../utils/errorhandler");
-const sendEmail = require("../utils/sendEmail")
+const sendEmail = require("../utils/sendEmail");
+const { assign } = require("nodemailer/lib/shared");
+const Assignment = require("../models/assignmentModel");
 
 exports.registerUser = catchAsyncErrors(async (req, res, next) => {
     const { name, email, password } = req.body;
@@ -14,6 +16,7 @@ exports.registerUser = catchAsyncErrors(async (req, res, next) => {
       name,
       email,
       password,
+      role: 'Teacher'
     });
   
     sendToken(user, 201, res);
@@ -23,6 +26,7 @@ exports.registerUser = catchAsyncErrors(async (req, res, next) => {
     // });
   });
   
+
   exports.loginUser = catchAsyncErrors(async (req, res, next) => {
     const { email, password } = req.body;
   
@@ -33,12 +37,14 @@ exports.registerUser = catchAsyncErrors(async (req, res, next) => {
     const user = await User.findOne({ email }).select("+password");
   
     if (!user) {
+      console.log("User not found");
       return next(new ErrorHander("Invalid email or password", 401));
     }
   
     const isPasswordMatched = await user.comparePassword(password);
   
     if (!isPasswordMatched) {
+      console.log("Incorrect password");
       return next(new ErrorHander("Invalid email or password", 401));
     }
 
@@ -118,3 +124,104 @@ exports.registerUser = catchAsyncErrors(async (req, res, next) => {
       await user.save();
       sendToken(user, 200, res);
     });
+
+
+  //   exports.addAssignment = catchAsyncErrors(async (req, res, next) => {
+  //     const {email, assignments} = req.body;
+ 
+  //     const user = await User.findOne({email});
+  
+  // if(!user){
+  //   return next(new ErrorHandler("User not found", 404))
+  // }
+  // user.assignments= assignments;
+  // await user.save();
+  // res.status(200).json({
+  //   success: true,
+  //   user
+  // })
+  //   });
+
+
+    exports.getAssignments = catchAsyncErrors(async (req, res, next) => {
+      const {email} = req.body;
+      // const assignments = await User.findOne({ email }).select('assignments').populate('assignments');
+      // const assignments = await User.findOne({ email }).populate('assignments').populate('assignments.');
+      const assignments = await User.findOne({ email }).populate({
+        path: 'assignments',
+        populate: {
+          path: 'questions.questionId',
+        }
+      }).select('assignments'); 
+      console.log(assignments);
+      
+      // const user = await User.findOne({ email });
+      // if (!user) {
+      //     console.log("User not found");
+      //     console.log(email);
+      //     return next(new ErrorHandler("Invalid email", 401));
+      //   }
+      // const assignments = await user.select('assignments').populate('assignments');
+      
+      // if (!assignments) {
+      //     console.log("User not found");
+      //     return next(new ErrorHandler("Invalid email or password", 401));
+      //   }
+      res.status(200).json(assignments);
+  
+  });
+
+  exports.updateAssignment = catchAsyncErrors(async (req, res, next) => {
+    const {id, questions} = req.body;
+    const assignment = await Assignment.findById(id);
+    if(!assignment){
+      return next(new ErrorHandler("Assignment not found", 404))  
+    }
+    assignment.questions = questions;
+    await assignment.save();
+    res.status(200).json(assignment);
+  });
+
+  exports.getAllAssignments = catchAsyncErrors(async (req, res, next) => {
+    // const assignments = await User.findOne({ email }).select('assignments').populate('assignments');
+    // const assignments = await User.findOne({ email }).populate('assignments').populate('assignments.');
+    const assignments = await Assignment.find({}).populate({
+      path: 'questions.questionId',
+    }); 
+    console.log(assignments);
+    
+    // if (!assignments) {
+    //     console.log("User not found");
+    //     return next(new ErrorHandler("Invalid email or password", 401));
+    //   }
+    res.status(200).json(assignments);
+
+});
+
+exports.deleteUser = catchAsyncErrors(async (req, res, next) => {
+  const user = await User.deleteOne({_id: req.body.id});
+  if (user.deletedCount === 0) {
+    return res.status(404).json({
+      success: false,
+      message: "User not found",
+    });
+  }
+  res.status(200).json({
+        success: true,
+        message: "User deleted successfully!", 
+    });
+});
+
+exports.deleteAssignment = catchAsyncErrors(async (req, res, next) => {
+  const assignment = await Assignment.deleteOne({_id: req.body.id});
+  if (assignment.deletedCount === 0) {
+    return res.status(404).json({
+      success: false,
+      message: "Assignment not found",
+    });
+  }
+  res.status(200).json({
+        success: true,
+        message: "Assignment deleted successfully!", 
+    });
+});

@@ -15,7 +15,7 @@ const mcqSchema = new mongoose.Schema({
 		required: [true, 'Please specify the correct option'],
         validate: {
             validator: function(val) {
-                return (1 <= val) && (val <= this.options?.length)
+                return (0 <= val) && (val <= (this.options?.length)-1)
             },
             message: `Correct option index must be according to the total number of options.`}
 	}
