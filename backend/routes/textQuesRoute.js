@@ -5,7 +5,7 @@ const {
 
 const router = express.Router();
 
-router.route("/textQuestion").post(createTextQuestion);
-router.route("/textQuestion").put(updateTextQuestion);
+router.route("/textQuestion").post(isAuthenticatedUser, createTextQuestion);
+router.route("/textQuestion").put(isAuthenticatedUser, updateTextQuestion);
 
 module.exports = router;

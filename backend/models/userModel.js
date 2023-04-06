@@ -77,5 +77,11 @@ userSchema.methods.getResetPasswordToken = function () {
     return resetToken;
   };
 
+  userSchema.methods.addAssignment = function(assignments){
+    console.log("HERE");
+    console.log("assignments:"+this.assignments);
+    this.assignments.push(assignments);
+    console.log("assignments:"+this.assignments);
+  }
 
     module.exports = mongoose.model("User", userSchema);
